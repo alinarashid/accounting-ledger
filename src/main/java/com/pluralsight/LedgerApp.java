@@ -35,7 +35,7 @@ public class LedgerApp {
 
             switch (choice) {
                 case "D" -> addDeposit();
-                case "P"-> System.out.println("Make Payment: Coming soon");
+                case "P"-> makePayment();
                 case "L" -> System.out.println("Ledger: Coming soon");
                 case "X" -> System.out.println("Exiting..");
                 default -> System.out.println("Invalid choice.");
@@ -65,6 +65,34 @@ public class LedgerApp {
         } else {
             System.out.println("Invalid amount.");
         }
+        scanner.nextLine();
+
+
+
+    }
+
+
+    public static void makePayment(){
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+        System.out.print("Enter description: ");
+        String description = scanner.nextLine();
+        System.out.print("Enter vendor: ");
+        String vendor = scanner.nextLine();
+        System.out.print("Enter amount: ");
+        double amount = scanner.nextDouble();
+        double fixedAmount = -Math.abs(amount);
+
+        Transaction transaction = new Transaction(today,now,description,vendor,fixedAmount);
+
+        FileManager.saveTransactions(transaction);
+        transactions.add(transaction);
+
+        System.out.println("Transaction added successfully.");
+
+
+
         scanner.nextLine();
 
 
