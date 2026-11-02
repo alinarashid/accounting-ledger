@@ -115,13 +115,22 @@ public class LedgerApp {
             choice = scanner.nextLine().toUpperCase();
 
             switch (choice) {
-                case "A" -> System.out.println("All Entries: Coming soon");
+                case "A" -> showAllTransactions();
                 case "D"-> System.out.println("Deposits: Coming soon");
                 case "P" -> System.out.println("Payments: Coming soon");
                 case "R" -> System.out.println("Reports: Coming soon");
-//                case "H" -> homeScreen();
+                case "H" -> System.out.println("Going home..");
                 default -> System.out.println("Invalid choice.");
             }
         } while (!choice.equals("H"));
+    }
+
+
+    public static void showAllTransactions(){
+        for ( int i = transactions.size() - 1 ; i >= 0 ; i-- ){
+            Transaction transaction = transactions.get(i);
+            System.out.println(transaction);
+        }
+
     }
 }
