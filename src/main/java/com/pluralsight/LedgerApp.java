@@ -116,8 +116,8 @@ public class LedgerApp {
 
             switch (choice) {
                 case "A" -> showAllTransactions();
-                case "D"-> System.out.println("Deposits: Coming soon");
-                case "P" -> System.out.println("Payments: Coming soon");
+                case "D"-> showDeposits();
+                case "P" -> showPayments();
                 case "R" -> System.out.println("Reports: Coming soon");
                 case "H" -> System.out.println("Going home..");
                 default -> System.out.println("Invalid choice.");
@@ -131,6 +131,30 @@ public class LedgerApp {
             Transaction transaction = transactions.get(i);
             System.out.println(transaction);
         }
+
+    }
+
+    public static void showDeposits(){
+        for ( int i = transactions.size() - 1 ; i >= 0 ; i-- ){
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getAmount() > 0){
+                System.out.println(transaction);
+            }
+
+        }
+
+    }
+
+    public static void showPayments(){
+        for ( int i = transactions.size() - 1 ; i >= 0 ; i-- ){
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getAmount() <0){
+                System.out.println(transaction);
+            }
+        }
+
 
     }
 }
