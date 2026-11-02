@@ -118,7 +118,7 @@ public class LedgerApp {
                 case "A" -> showAllTransactions();
                 case "D"-> showDeposits();
                 case "P" -> showPayments();
-                case "R" -> System.out.println("Reports: Coming soon");
+                case "R" -> reportsScreen();
                 case "H" -> System.out.println("Going home..");
                 default -> System.out.println("Invalid choice.");
             }
@@ -155,6 +155,34 @@ public class LedgerApp {
             }
         }
 
+    }
+
+    public static void reportsScreen(){
+        String choice;
+        do{
+            System.out.println("""
+        
+        ===== REPORTS =====
+        1) Month To Date
+        2) Previous Month
+        3) Year To Date
+        4) Previous Year
+        5) Search by Vendor
+        0) Back
+        """);
+            System.out.print("Choose an option: ");
+            choice = scanner.nextLine();
+
+            switch (choice) {
+                case "1" -> System.out.println("Month To Date: Coming soon");
+                case "2" -> System.out.println("Previous Month: Coming soon");
+                case "3"-> System.out.println("Year To Date: Coming soon");
+                case "4" -> System.out.println("Previous Year: Coming soon");
+                case "5" -> System.out.println("Search by Vendor: Coming soon");
+                case "0" -> System.out.println("Going back to ledger.. ");
+                default -> System.out.println("Invalid choice.");
+            }
+        } while (!choice.equals("0"));
 
     }
 }
