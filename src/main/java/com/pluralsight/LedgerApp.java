@@ -36,7 +36,7 @@ public class LedgerApp {
             switch (choice) {
                 case "D" -> addDeposit();
                 case "P"-> makePayment();
-                case "L" -> System.out.println("Ledger: Coming soon");
+                case "L" -> ledgerScreen();
                 case "X" -> System.out.println("Exiting..");
                 default -> System.out.println("Invalid choice.");
             }
@@ -97,5 +97,31 @@ public class LedgerApp {
 
 
 
+    }
+
+
+    public static void ledgerScreen() {
+        String choice;
+        do{
+            System.out.println("""
+        ===== LEDGER =====
+        A) All Entries
+        D) Deposits
+        P) Payments
+        R) Reports
+        H) Home
+        """);
+            System.out.print("Choose an option: ");
+            choice = scanner.nextLine().toUpperCase();
+
+            switch (choice) {
+                case "A" -> System.out.println("All Entries: Coming soon");
+                case "D"-> System.out.println("Deposits: Coming soon");
+                case "P" -> System.out.println("Payments: Coming soon");
+                case "R" -> System.out.println("Reports: Coming soon");
+//                case "H" -> homeScreen();
+                default -> System.out.println("Invalid choice.");
+            }
+        } while (!choice.equals("H"));
     }
 }
