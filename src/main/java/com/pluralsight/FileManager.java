@@ -1,9 +1,12 @@
 package com.pluralsight;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class FileManager {
@@ -36,5 +39,26 @@ public class FileManager {
         }
 
         return transactions;
+    }
+
+    public static void saveTransactions(Transaction transactions) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("transactions.csv",true));
+
+            DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+            String row = String.format("%n%s|%s|%s|%s|%.2f",
+                    transactions.getDate(),
+                    transactions.getTime().format(timeFmt),
+                    transactions.getDescription(),
+                    transactions.getVendor(),
+                    transactions.getAmount());
+
+            writer.write(row);
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+        }
     }
 }

@@ -8,7 +8,7 @@ public class Transaction {
 
     // Fields
     private LocalDate  date;
-    private LocalTime time;
+    LocalTime time;
     private String description;
     private String vendor;
     private double amount;
