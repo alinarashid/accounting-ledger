@@ -178,11 +178,34 @@ public class LedgerApp {
                 case "2" -> System.out.println("Previous Month: Coming soon");
                 case "3"-> System.out.println("Year To Date: Coming soon");
                 case "4" -> System.out.println("Previous Year: Coming soon");
-                case "5" -> System.out.println("Search by Vendor: Coming soon");
+                case "5" -> searchByVendor();
                 case "0" -> System.out.println("Going back to ledger.. ");
                 default -> System.out.println("Invalid choice.");
             }
         } while (!choice.equals("0"));
 
     }
+
+    public static void searchByVendor() {
+        System.out.print("Enter vendor name: ");
+        String vendorName = scanner.nextLine();
+
+        boolean found = false;
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getVendor().equalsIgnoreCase(vendorName)) {
+                System.out.println(transaction);
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("%nNo transactions found for: " + vendorName);
+        }
+    }
+
+
 }
+
