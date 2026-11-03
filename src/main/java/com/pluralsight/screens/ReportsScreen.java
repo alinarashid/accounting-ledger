@@ -77,22 +77,8 @@ public class ReportsScreen {
 
     public static void yearToDate() {
         LocalDate today = LocalDate.now();
-        int year = today.getYear();
-
-        boolean found = false;
-
-        for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
-            Transaction transaction = LedgerApp.transactions.get(i);
-
-            if (transaction.getDate().getYear() == year) {
-                System.out.println(transaction);
-                found = true;
-            }
-        }
-
-        if (!found) {
-            System.out.println("\n No transactions found for: " + year);
-        }
+        LocalDate start = today.withDayOfYear(1);
+        showDateRange(start, today);
     }
 
     public static void previousYear() {
