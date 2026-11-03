@@ -168,6 +168,7 @@ public class LedgerApp {
         3) Year To Date
         4) Previous Year
         5) Search by Vendor
+        6) Custom Search
         0) Back
         """);
             System.out.print("Choose an option: ");
@@ -179,6 +180,7 @@ public class LedgerApp {
                 case "3"-> yearToDate();
                 case "4" -> previousYear();
                 case "5" -> searchByVendor();
+                case "6" -> customSearch();
                 case "0" -> System.out.println("Going back to ledger.. ");
                 default -> System.out.println("Invalid choice.");
             }
@@ -290,6 +292,69 @@ public class LedgerApp {
 
     }
 
+    public static void customSearch() {
+        System.out.print("Enter Start Date (yyyy-MM-dd): ");
+        String startDate = scanner.nextLine();
+        System.out.print("Enter End Date (yyyy-MM-dd): ");
+        String endDate = scanner.nextLine();
+        System.out.print("Enter Description: ");
+        String description = scanner.nextLine();
+        System.out.print("Enter Vendor Name: ");
+        String vendor = scanner.nextLine();
+        System.out.print("Enter Amount: ");
+        String amount = scanner.nextLine();
+
+        boolean found = false;
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+            boolean matches = true;
+
+            if (!startDate.isBlank()) {
+                LocalDate from = LocalDate.parse(startDate);
+                if (transaction.getDate().isBefore(from)) {
+                    matches = false;
+                }
+            }
+
+            if (!endDate.isBlank()) {
+                LocalDate to = LocalDate.parse(endDate);
+                if (transaction.getDate().isAfter(to)) {
+                    matches = false;
+                }
+            }
+
+
+            if (!description.isBlank()) {
+                description = description.trim();
+                if (!transaction.getDescription().toLowerCase().contains(description.toLowerCase())) {
+                    matches = false;
+                }
+            }
+
+            if (!vendor.isBlank()) {
+                vendor = vendor.trim();
+                if (!transaction.getVendor().toLowerCase().contains(vendor.toLowerCase())) {
+                    matches = false;
+                }
+            }
+
+            if (!amount.isBlank()) {
+                double amountPrased = Double.parseDouble(amount);
+                if (transaction.getAmount() != amountPrased) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                System.out.println(transaction);
+                found = true;
+            }
+        }
+        if (!found){
+            System.out.println("No transactions match your search.");
+
+        }
+    }
+
 
 }
-
