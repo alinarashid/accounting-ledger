@@ -82,24 +82,10 @@ public class ReportsScreen {
     }
 
     public static void previousYear() {
-        LocalDate today = LocalDate.now();
-        LocalDate previousYear = today.minusYears(1);
-        int year = previousYear.getYear();
-
-        boolean found = false;
-
-        for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
-            Transaction transaction = LedgerApp.transactions.get(i);
-
-            if (transaction.getDate().getYear() == year) {
-                System.out.println(transaction);
-                found = true;
-            }
-        }
-
-        if (!found) {
-            System.out.println("\n No transactions found for: " + year);
-        }
+        int lastYear = LocalDate.now().getYear() - 1;
+        LocalDate start = LocalDate.of(lastYear, 1, 1);
+        LocalDate end = LocalDate.of(lastYear, 12, 31);
+        showDateRange(start, end);
     }
 
 
