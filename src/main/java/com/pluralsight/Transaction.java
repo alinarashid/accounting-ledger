@@ -42,11 +42,20 @@ public class Transaction {
         return amount;
     }
 
+//    @Override
+//    public String toString() {
+//        DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm:ss");
+//
+//        return String.format("%s | %s | %-25s | %-20s | %10.2f",
+//                date, time.format(timeFmt), description, vendor, amount);
+//    }
+
     @Override
     public String toString() {
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String color = amount >= 0 ? CafeTheme.GREEN : CafeTheme.RED;
 
-        return String.format("%s | %s | %-25s | %-20s | %10.2f",
-                date, time.format(timeFmt), description, vendor, amount);
+        return String.format("%s  %s  %-22s  %-20s  ", date, time.format(timeFmt), description, vendor)
+                + color + String.format("%10.2f", amount) + CafeTheme.RESET;
     }
 }

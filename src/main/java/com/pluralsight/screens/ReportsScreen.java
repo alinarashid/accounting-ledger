@@ -69,26 +69,10 @@ public class ReportsScreen {
     }
 
     public static void previousMonth() {
-        LocalDate today = LocalDate.now();
-        LocalDate previousMonth = today.minusMonths(1);
-
-        int year = previousMonth.getYear();
-        int month = previousMonth.getMonthValue();
-
-        boolean found = false;
-
-        for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
-            Transaction transaction = LedgerApp.transactions.get(i);
-
-            if (transaction.getDate().getYear() == year && transaction.getDate().getMonthValue() == month) {
-                System.out.println(transaction);
-                found = true;
-            }
-        }
-
-        if (!found) {
-            System.out.println("\n No transactions found for: " + year + "-" + month);
-        }
+        LocalDate firstOfThisMonth = LocalDate.now().withDayOfMonth(1);  // Nov 1  ← anchor
+        LocalDate start = firstOfThisMonth.minusMonths(1);               // Oct 1  ← back 1 month
+        LocalDate end = firstOfThisMonth.minusDays(1);                   // Oct 31 ← back 1 day
+        showDateRange(start, end);
     }
 
     public static void yearToDate() {
