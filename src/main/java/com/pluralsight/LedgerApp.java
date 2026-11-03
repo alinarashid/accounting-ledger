@@ -176,8 +176,8 @@ public class LedgerApp {
             switch (choice) {
                 case "1" -> monthToDate();
                 case "2" -> previousMonth();
-                case "3"-> System.out.println("Year To Date: Coming soon");
-                case "4" -> System.out.println("Previous Year: Coming soon");
+                case "3"-> yearToDate();
+                case "4" -> previousYear();
                 case "5" -> searchByVendor();
                 case "0" -> System.out.println("Going back to ledger.. ");
                 default -> System.out.println("Invalid choice.");
@@ -251,6 +251,44 @@ public class LedgerApp {
     }
 
 
+    public static void yearToDate() {
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+
+        boolean found = false;
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getDate().getYear() == year ) {
+                System.out.println(transaction);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("\n No transactions found for: " + today.getYear());
+        }
+
+    }
+
+    public static void previousYear() {
+        LocalDate today = LocalDate.now();
+        LocalDate previousYear = today.minusYears(1);
+        int year = previousYear.getYear();
+
+        boolean found = false;
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+            if (transaction.getDate().getYear() == year ) {
+                System.out.println(transaction);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("\n No transactions found for: " + year);
+        }
+
+    }
 
 
 }
