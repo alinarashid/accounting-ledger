@@ -174,8 +174,8 @@ public class LedgerApp {
             choice = scanner.nextLine();
 
             switch (choice) {
-                case "1" -> System.out.println("Month To Date: Coming soon");
-                case "2" -> System.out.println("Previous Month: Coming soon");
+                case "1" -> monthToDate();
+                case "2" -> previousMonth();
                 case "3"-> System.out.println("Year To Date: Coming soon");
                 case "4" -> System.out.println("Previous Year: Coming soon");
                 case "5" -> searchByVendor();
@@ -202,9 +202,55 @@ public class LedgerApp {
         }
 
         if (!found) {
-            System.out.println("%nNo transactions found for: " + vendorName);
+            System.out.println("\n No transactions found for: " + vendorName);
         }
     }
+
+    public static void monthToDate() {
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        int month = today.getMonthValue();
+
+        boolean found = false;
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getDate().getYear() == year && transaction.getDate().getMonthValue() == month) {
+                System.out.println(transaction);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("\n No transactions found for: " + today.getYear() + "-" + today.getMonthValue());
+        }
+
+    }
+
+    public static void previousMonth() {
+        LocalDate today = LocalDate.now();
+        LocalDate previousMonth = today.minusMonths(1);
+
+        int year = previousMonth.getYear();
+        int month = previousMonth.getMonthValue();
+
+        boolean found = false;
+
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            Transaction transaction = transactions.get(i);
+
+            if (transaction.getDate().getYear() == year && transaction.getDate().getMonthValue() == month) {
+                System.out.println(transaction);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("\n No transactions found for: " + previousMonth.getYear() + "-" + previousMonth.getMonthValue());
+        }
+
+    }
+
+
 
 
 }
