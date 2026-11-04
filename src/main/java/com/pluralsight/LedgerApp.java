@@ -1,6 +1,7 @@
 package com.pluralsight;
 // Different package, so it needs an import
 
+import com.pluralsight.theme.CafeSound;
 import com.pluralsight.screens.HomeScreen;
 
 // ArrayList and Scanner come from Java's built-in java.util toolbox.
@@ -22,6 +23,8 @@ public class LedgerApp {
     public static ArrayList<Transaction> transactions = FileManager.loadTransactions();
 
     public static void main(String[] args) {
+        // dreamy intro sound
+        CafeSound.playDreamyWelcome();
         // App ends when the user exits the home screen
         HomeScreen.show();
     }

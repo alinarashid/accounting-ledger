@@ -1,7 +1,7 @@
 package com.pluralsight.screens;
 
 // These classes live in com.pluralsight, a different package, so they need imports
-
+import com.pluralsight.theme.CafeSound;
 import com.pluralsight.FileManager;
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
@@ -63,8 +63,10 @@ public class HomeScreen {
         double finalAmount;
         if (isDeposit) {
             finalAmount = Math.abs(amount);
+            CafeSound.playDepositSound();
         } else {
             finalAmount = -Math.abs(amount);
+            CafeSound.playPaymentSound();
         }
         Transaction transaction = new Transaction(today, now, description, vendor, finalAmount);
 
