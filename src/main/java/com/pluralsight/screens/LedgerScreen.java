@@ -1,6 +1,7 @@
 package com.pluralsight.screens;
 
 // LedgerApp and Transaction live in com.pluralsight, a different package
+
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
 

@@ -1,6 +1,7 @@
 package com.pluralsight.screens;
 
 // These classes live in com.pluralsight, a different package, so they need imports
+
 import com.pluralsight.FileManager;
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
@@ -37,8 +38,8 @@ public class HomeScreen {
                 case "D" -> addTransaction(true);
                 // false = payment
                 case "P" -> addTransaction(false);
-                case "L" -> LedgerScreen.show();
                 // when the ledger loop ends, we come back here
+                case "L" -> LedgerScreen.show();
                 case "X" -> System.out.println("Exiting..");
                 default -> System.out.println("Invalid choice.");
             }
@@ -60,7 +61,7 @@ public class HomeScreen {
 
         // * Deposits are always positive, payments always negative, whatever the user types
         double finalAmount;
-        if (isDeposit){
+        if (isDeposit) {
             finalAmount = Math.abs(amount);
         } else {
             finalAmount = -Math.abs(amount);
@@ -68,7 +69,7 @@ public class HomeScreen {
         Transaction transaction = new Transaction(today, now, description, vendor, finalAmount);
 
         // ? Why both? File = kept for next time, list = shows up in the ledger right now
-        FileManager.saveTransactions(transaction);
+        FileManager.saveTransaction(transaction);
         LedgerApp.transactions.add(transaction);
 
         System.out.println("Transaction added successfully.");

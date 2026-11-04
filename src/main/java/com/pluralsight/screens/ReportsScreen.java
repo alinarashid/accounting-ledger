@@ -1,6 +1,7 @@
 package com.pluralsight.screens;
 
 // LedgerApp and Transaction live in com.pluralsight, a different package
+
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
 
@@ -18,7 +19,7 @@ public class ReportsScreen {
         String choice;
         do {
             System.out.println("""
-
+                    
                     ===== REPORTS =====
                     1) Month To Date
                     2) Previous Month
