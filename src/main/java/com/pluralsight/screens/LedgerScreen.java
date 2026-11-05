@@ -1,7 +1,7 @@
 package com.pluralsight.screens;
 
 // LedgerApp and Transaction live in com.pluralsight, a different package
-
+import com.pluralsight.theme.CafeTheme;
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
 
@@ -16,16 +16,11 @@ public class LedgerScreen {
     public static void show() {
         String choice;
         do {
-            System.out.println("""
-                    
-                    ===== LEDGER =====
-                    A) All Entries
-                    D) Deposits
-                    P) Payments
-                    R) Reports
-                    H) Home
-                    """);
-            System.out.print("Choose an option: ");
+            CafeTheme.printBoard("LEDGER",
+                    new String[]{"A", "D", "P", "R", "H"},
+                    new String[]{"All entries", "Deposits", "Payments", "Reports", "Home"},
+                    null);
+            CafeTheme.printPrompt();
             choice = LedgerApp.scanner.nextLine().toUpperCase();
 
             switch (choice) {
@@ -43,6 +38,9 @@ public class LedgerScreen {
     // Shows "ALL", "DEPOSITS" (amount > 0) or "PAYMENTS" (amount < 0)
     public static void showTransactions(String type) {
         // * Newest first: start at the LAST index and walk backwards to 0
+
+        CafeTheme.printHeaderBar("LEDGER  ·  " + type + "  ·  newest first");
+        CafeTheme.printTableHeader();
 
         for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = LedgerApp.transactions.get(i);
