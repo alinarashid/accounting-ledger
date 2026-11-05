@@ -3,6 +3,8 @@ package com.pluralsight;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+// For the green/red colors
+import com.pluralsight.theme.CafeTheme;
 
 /**
  * Transaction
@@ -52,15 +54,17 @@ public class Transaction {
     }
 
     // * How a transaction looks on screen. println(transaction) calls this automatically
-    // e.g. 2026-11-02 | 08:05:00 | Coffee beans 20lb         | Bean Roasters        |    -320.00
+    // e.g. 2026-11-02  08:05:00  Coffee beans 20lb       Bean Roasters            -320.00
     @Override
     public String toString() {
         // ! Without this, 09:00:00 would print as 09:00 (LocalTime drops :00 seconds)
         DateTimeFormatter timeFmt = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        // %-25s / %-20s = fixed widths so the columns line up
-        // %10.2f = always 2 decimals, lined up on the right
-        return String.format("%s | %s | %-25s | %-20s | %10.2f",
-                date, time.format(timeFmt), description, vendor, amount);
+        // ? shortcut if/else: money in = green, money out = red
+        String color = amount >= 0 ? CafeTheme.GREEN : CafeTheme.RED;
+
+        // ! These widths must match CafeTheme.printTableHeader(), or the columns won't line up
+        return String.format("%s  %s  %-22s  %-20s  ", date, time.format(timeFmt), description, vendor)
+                + color + String.format("%10.2f", amount) + CafeTheme.RESET;   // RESET = back to normal color
     }
 }
