@@ -51,12 +51,9 @@ public class HomeScreen {
         // Pink title bar: "NEW DEPOSIT" or "NEW PAYMENT"
         CafeTheme.printHeaderBar(isDeposit ? "NEW DEPOSIT" : "NEW PAYMENT");
 
-        System.out.print("Enter description: ");
-        String description = LedgerApp.scanner.nextLine();
-        System.out.print("Enter vendor: ");
-        String vendor = LedgerApp.scanner.nextLine();
-        System.out.print("Enter amount: ");
-        double amount = LedgerApp.scanner.nextDouble();
+        String description = askForText("Enter description: ");
+        String vendor = askForText("Enter vendor: ");
+        double amount = askForAmount();
 
         // * Deposits are always positive, payments always negative, whatever the user types
         double finalAmount;
@@ -74,9 +71,44 @@ public class HomeScreen {
         LedgerApp.transactions.add(transaction);
 
         CafeTheme.printReceipt(transaction);   // pink receipt instead of a plain message
+    }
 
-        // ! Eats the leftover Enter from nextDouble(), or the menu reads it as "Invalid choice"
-        LedgerApp.scanner.nextLine();
+    // * Keeps asking until the user types something (blank isn't allowed)
+    // ! A | would break the CSV (it's our column separator), so swap it for a -
+    public static String askForText(String question) {
+        while (true) {
+            System.out.print(question);
+            String text = LedgerApp.scanner.nextLine().trim().replace("|", "-");
 
+            if (text.isBlank()) {
+                System.out.println("This can't be empty. Try again.");
+            } else {
+                return text;   // got something: hand it back
+            }
+        }
+    }
+
+    // * Keeps asking until the user types a real number that isn't 0
+    // ? Why nextLine() + parseDouble instead of nextDouble()? "abc" would crash nextDouble(),
+    //   and nextLine() leaves no leftover Enter behind
+    public static double askForAmount() {
+        while (true) {
+            System.out.print("Enter amount: ");
+            String input = LedgerApp.scanner.nextLine().trim();
+
+            try {
+                double amount = Double.parseDouble(input);   // "12.50" -> 12.5, "abc" -> error
+
+                if (amount == 0) {
+                    System.out.println("Amount can't be 0. Try again.");
+                } else {
+                    return amount;   // a good number: leave the loop and hand it back
+                }
+
+            } catch (NumberFormatException e) {
+                // runs when the text isn't a number, like "abc" or "$12"
+                System.out.println("Please enter a number, like 12.50");
+            }
+        }
     }
 }
