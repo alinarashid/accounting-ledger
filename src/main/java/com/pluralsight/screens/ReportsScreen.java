@@ -1,11 +1,12 @@
 package com.pluralsight.screens;
 
 // LedgerApp and Transaction live in com.pluralsight, a different package
-
+import com.pluralsight.theme.CafeTheme;
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * ReportsScreen
@@ -18,18 +19,12 @@ public class ReportsScreen {
     public static void show() {
         String choice;
         do {
-            System.out.println("""
-                    
-                    ===== REPORTS =====
-                    1) Month To Date
-                    2) Previous Month
-                    3) Year To Date
-                    4) Previous Year
-                    5) Search by Vendor
-                    6) Custom Search
-                    0) Back
-                    """);
-            System.out.print("Choose an option: ");
+            CafeTheme.printBoard("REPORTS",
+                    new String[]{"1", "2", "3", "4", "5", "6", "0"},
+                    new String[]{"Month to date", "Previous month", "Year to date",
+                            "Previous year", "Search by vendor", "Custom search", "Back"},
+                    null);
+            CafeTheme.printPrompt();
             // the shared Scanner
             choice = LedgerApp.scanner.nextLine();
 
@@ -54,7 +49,9 @@ public class ReportsScreen {
     public static void monthToDate() {
         LocalDate today = LocalDate.now();             // 2026-11-03
         LocalDate start = today.withDayOfMonth(1);     // 2026-11-01
+        CafeTheme.printHeaderBar("MONTH TO DATE");
         showDateRange(start, today);
+
     }
 
     // 1st of last month -> last day of last month
@@ -65,6 +62,7 @@ public class ReportsScreen {
         LocalDate end = firstOfThisMonth.minusDays(1);       // 2026-10-31
         // ! January works too: anchor 2027-01-01 -> start 2026-12-01, end 2026-12-31
         // ! No need to know month lengths: 2027-03-01 minus 1 day = 2027-02-28
+        CafeTheme.printHeaderBar("PREVIOUS MONTH");
         showDateRange(start, end);
     }
 
@@ -73,6 +71,7 @@ public class ReportsScreen {
     public static void yearToDate() {
         LocalDate today = LocalDate.now();             // 2026-11-03
         LocalDate start = today.withDayOfYear(1);      // 2026-01-01
+        CafeTheme.printHeaderBar("YEAR TO DATE");
         showDateRange(start, today);
     }
 
@@ -82,6 +81,7 @@ public class ReportsScreen {
         int lastYear = LocalDate.now().getYear() - 1;        // 2026 - 1 = 2025
         LocalDate start = LocalDate.of(lastYear, 1, 1);       // 2025-01-01
         LocalDate end = LocalDate.of(lastYear, 12, 31);       // 2025-12-31
+        CafeTheme.printHeaderBar("PREVIOUS YEAR");
         showDateRange(start, end);
     }
 
@@ -89,7 +89,12 @@ public class ReportsScreen {
     // e.g. start 2026-10-01, end 2026-10-31:
     //   2026-10-01 shown (start day)   2026-10-31 shown (end day)
     //   2026-09-30 skipped (too early) 2026-11-01 skipped (too late)
+
+
     public static void showDateRange(LocalDate start, LocalDate end) {
+        // e.g. "Nov 1, 2026  →  Nov 5, 2026"
+        DateTimeFormatter niceDate = DateTimeFormatter.ofPattern("MMM d, yyyy");
+        System.out.println(CafeTheme.GRAY + start.format(niceDate) + "  →  " + end.format(niceDate) + CafeTheme.RESET+ "\n");        CafeTheme.printTableHeader();
         boolean found = false;
 
         for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
@@ -116,6 +121,8 @@ public class ReportsScreen {
         System.out.print("Enter vendor name: ");
         String vendorName = LedgerApp.scanner.nextLine();
 
+        CafeTheme.printHeaderBar("SEARCH BY VENDOR  ·  " + vendorName);
+        CafeTheme.printTableHeader();
         boolean found = false;
 
         for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
@@ -147,6 +154,8 @@ public class ReportsScreen {
         System.out.print("Enter Amount: ");
         String amount = LedgerApp.scanner.nextLine();
 
+        CafeTheme.printHeaderBar("CUSTOM SEARCH");
+        CafeTheme.printTableHeader();
         boolean found = false;
 
         for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
