@@ -1,7 +1,9 @@
 package com.pluralsight.theme;
 
-import com.pluralsight.Transaction;   // the receipt prints a Transaction, which lives in com.pluralsight
+// My own class from another package (the receipt prints a Transaction)
+import com.pluralsight.Transaction;
 
+// Java's built-in tools: reading the art file, time format, list
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.time.format.DateTimeFormatter;
@@ -11,8 +13,8 @@ import java.util.ArrayList;
  * CafeTheme
  * Everything about how Alina's Cafe LOOKS in the terminal:
  * colors, menu boards, header bars, the receipt, the storefront and the goodbye screen.
- * LedgerApp calls these methods so every screen shares the same style.
- */
+ * The screens call these methods, so every screen shares the same style.
+ * */
 public class CafeTheme {
 
     // ===== Colors =====
@@ -91,7 +93,7 @@ public class CafeTheme {
     }
 
     // ===== Table header =====
-    // Column titles that line up with Transaction's toString()
+    // Column titles. The widths (22, 20, 10) must match Transaction's toString(), or the columns won't line up
     public static void printTableHeader() {
         System.out.println(LIGHT_PINK + String.format("%-10s  %-8s  %-22s  %-20s  %10s",
                 "DATE", "TIME", "DESCRIPTION", "VENDOR", "AMOUNT") + RESET);
