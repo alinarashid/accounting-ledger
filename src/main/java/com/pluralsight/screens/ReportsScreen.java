@@ -1,10 +1,11 @@
 package com.pluralsight.screens;
 
-// LedgerApp and Transaction live in com.pluralsight, a different package
+// My own classes from other packages
 import com.pluralsight.theme.CafeTheme;
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
 
+// Java's built-in date tools
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -15,7 +16,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class ReportsScreen {
 
-    // * Menu loop: keeps showing until the user picks 0
+    // Menu loop: keeps showing until the user picks 0
     public static void show() {
         String choice;
         do {
@@ -25,7 +26,6 @@ public class ReportsScreen {
                             "Previous year", "Search by vendor", "Custom search", "Back"},
                     null);
             CafeTheme.printPrompt();
-            // the shared Scanner
             choice = LedgerApp.scanner.nextLine();
 
             switch (choice) {
@@ -42,73 +42,65 @@ public class ReportsScreen {
     }
 
     // ===== Date reports =====
-    // * Each report only works out its start and end date, then showDateRange() does the rest
+    // Each report only picks a start and end date, then showDateRange() does the rest
 
-    // 1st of this month -> today
-    // e.g. today 2026-11-03: shows 2026-11-01 to 2026-11-03
+    // 1st of this month -> today   (e.g. Nov 1 -> Nov 6)
     public static void monthToDate() {
-        LocalDate today = LocalDate.now();             // 2026-11-03
-        LocalDate start = today.withDayOfMonth(1);     // 2026-11-01
+        LocalDate today = LocalDate.now();
+        LocalDate start = today.withDayOfMonth(1);
         CafeTheme.printHeaderBar("MONTH TO DATE");
         showDateRange(start, today);
 
     }
 
-    // 1st of last month -> last day of last month
-    // e.g. today 2026-11-03: shows 2026-10-01 to 2026-10-31
+    // 1st -> last day of last month   (e.g. Oct 1 -> Oct 31)
     public static void previousMonth() {
-        LocalDate firstOfThisMonth = LocalDate.now().withDayOfMonth(1);  // 2026-11-01 (the anchor)
-        LocalDate start = firstOfThisMonth.minusMonths(1);   // 2026-10-01
-        LocalDate end = firstOfThisMonth.minusDays(1);       // 2026-10-31
-        // ! January works too: anchor 2027-01-01 -> start 2026-12-01, end 2026-12-31
-        // ! No need to know month lengths: 2027-03-01 minus 1 day = 2027-02-28
+        LocalDate firstOfThisMonth = LocalDate.now().withDayOfMonth(1);  // the anchor: Nov 1
+        LocalDate start = firstOfThisMonth.minusMonths(1);   // Oct 1
+        LocalDate end = firstOfThisMonth.minusDays(1);        // Oct 31
+
+        // Works for any month length and for January (Jan 1 -> Dec 1 to Dec 31)
         CafeTheme.printHeaderBar("PREVIOUS MONTH");
         showDateRange(start, end);
     }
 
-    // Jan 1 of this year -> today
-    // e.g. today 2026-11-03: shows 2026-01-01 to 2026-11-03
+    // Jan 1 -> today
     public static void yearToDate() {
-        LocalDate today = LocalDate.now();             // 2026-11-03
-        LocalDate start = today.withDayOfYear(1);      // 2026-01-01
+        LocalDate today = LocalDate.now();
+        LocalDate start = today.withDayOfYear(1);
         CafeTheme.printHeaderBar("YEAR TO DATE");
         showDateRange(start, today);
     }
 
     // Jan 1 -> Dec 31 of last year
-    // e.g. today 2026-11-03: shows 2025-01-01 to 2025-12-31
     public static void previousYear() {
-        int lastYear = LocalDate.now().getYear() - 1;        // 2026 - 1 = 2025
-        LocalDate start = LocalDate.of(lastYear, 1, 1);       // 2025-01-01
-        LocalDate end = LocalDate.of(lastYear, 12, 31);       // 2025-12-31
+        int lastYear = LocalDate.now().getYear() - 1;
+        LocalDate start = LocalDate.of(lastYear, 1, 1);
+        LocalDate end = LocalDate.of(lastYear, 12, 31);
         CafeTheme.printHeaderBar("PREVIOUS YEAR");
         showDateRange(start, end);
     }
 
     // Shows every transaction from start to end (both days included), newest first
-    // e.g. start 2026-10-01, end 2026-10-31:
-    //   2026-10-01 shown (start day)   2026-10-31 shown (end day)
-    //   2026-09-30 skipped (too early) 2026-11-01 skipped (too late)
-
-
     public static void showDateRange(LocalDate start, LocalDate end) {
         // e.g. "Nov 1, 2026  →  Nov 5, 2026"
-        DateTimeFormatter niceDate = DateTimeFormatter.ofPattern("MMM d, yyyy");
-        System.out.println(CafeTheme.GRAY + start.format(niceDate) + "  →  " + end.format(niceDate) + CafeTheme.RESET+ "\n");        CafeTheme.printTableHeader();
+        DateTimeFormatter cuteDate = DateTimeFormatter.ofPattern("MMM d, yyyy");
+        System.out.println(CafeTheme.GRAY + start.format(cuteDate) + "  →  " + end.format(cuteDate) + CafeTheme.RESET+ "\n");
+        CafeTheme.printTableHeader();
         boolean found = false;
 
         for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = LedgerApp.transactions.get(i);
             LocalDate date = transaction.getDate();
 
-            // ? Why "not before" instead of "after"? So the start and end days themselves count
+            // "not before" and "not after" so the start and end days count too
             if (!date.isBefore(start) && !date.isAfter(end)) {
                 System.out.println(transaction);
                 found = true;
             }
         }
 
-        // ! Must be AFTER the loop, or the message prints once per transaction
+        // After the loop, so the message prints once (not once per transaction)
         if (!found) {
             System.out.println("\n No transactions found from " + start + " to " + end);
         }
@@ -116,7 +108,7 @@ public class ReportsScreen {
 
     // ===== Searches =====
 
-    // Shows every transaction for one vendor (upper/lowercase doesn't matter)
+    // Every transaction for one vendor (upper/lowercase doesn't matter)
     public static void searchByVendor() {
         System.out.print("Enter vendor name: ");
         String vendorName = LedgerApp.scanner.nextLine();
@@ -139,10 +131,9 @@ public class ReportsScreen {
         }
     }
 
-    // Bonus: filter by any mix of start date, end date, description, vendor and amount
-    // * A blank answer skips that filter
+    // Bonus: filter by any mix of dates, description, vendor and amount
+    // A blank answer skips that filter
     public static void customSearch() {
-        // ? Why nextLine() for everything? So we can tell when the user left it blank
         System.out.print("Enter Start Date (yyyy-MM-dd): ");
         String startDate = LedgerApp.scanner.nextLine();
         System.out.print("Enter End Date (yyyy-MM-dd): ");
@@ -154,8 +145,7 @@ public class ReportsScreen {
         System.out.print("Enter Amount: ");
         String amount = LedgerApp.scanner.nextLine();
 
-        // * Turn the typed text into dates and a number ONCE, before the loop
-        // ! If anything is typed wrong, show a message and go back to the menu instead of crashing
+        // Turn the typed text into dates and a number ONCE, before the loop
         LocalDate from = null;
         LocalDate to = null;
         double amountParsed = 0;
@@ -171,8 +161,9 @@ public class ReportsScreen {
                 amountParsed = Double.parseDouble(amount.trim());
             }
         } catch (Exception e) {
+            // Typed wrong: show a message and go back to the menu instead of crashing
             System.out.println("Invalid input. Dates must look like 2026-11-04 and amounts like 12.50");
-            return;   // leave customSearch, back to the reports menu
+            return;
         }
 
         CafeTheme.printHeaderBar("CUSTOM SEARCH");
@@ -182,7 +173,7 @@ public class ReportsScreen {
         for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = LedgerApp.transactions.get(i);
 
-            // * Starts as a match, any filter it fails flips it to false
+            // Starts as a match, any filter it fails flips it to false
             boolean matches = true;
 
             if (!startDate.isBlank()) {
@@ -212,7 +203,7 @@ public class ReportsScreen {
                 }
             }
 
-            // ! Exact match, so payments need the minus sign (-320 finds it, 320 doesn't)
+            // Exact match, so payments need the minus sign (-320 finds it, 320 doesn't)
             if (!amount.isBlank()) {
                 if (transaction.getAmount() != amountParsed) {
                     matches = false;
