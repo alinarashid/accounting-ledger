@@ -1,23 +1,23 @@
 package com.pluralsight.screens;
 
-// These classes live in com.pluralsight, a different package, so they need imports
+// My own classes from other packages
 import com.pluralsight.theme.CafeSound;
 import com.pluralsight.theme.CafeTheme;
 import com.pluralsight.FileManager;
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
 
+// Java's built-in date and time tools
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
  * HomeScreen
- * The first menu the user sees: add a deposit, make a payment,
- * open the ledger, or exit.
+ * The first menu: add a deposit, make a payment, open the ledger, or exit.
  */
 public class HomeScreen {
 
-    // * Menu loop: keeps showing until the user picks X
+    // Menu loop: keeps showing until the user picks X
     public static void show() {
         String choice;
         do {
@@ -33,21 +33,26 @@ public class HomeScreen {
             switch (choice) {
                 // true = deposit
                 case "D" -> addTransaction(true);
+
                 // false = payment
                 case "P" -> addTransaction(false);
+
                 // when the ledger loop ends, we come back here
                 case "L" -> LedgerScreen.show();
+
                 case "X" -> CafeTheme.printGoodbye();
                 default -> System.out.println("Invalid choice.");
             }
         } while (!choice.equals("X"));
     }
 
-    // Adds a deposit (isDeposit = true) or a payment (isDeposit = false)
+    // One method for both: isDeposit = true for a deposit, false for a payment
     public static void addTransaction(boolean isDeposit) {
-        // Date and time come from the computer's clock, the user doesn't type them
+
+        // Date and time come from the computer's clock
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
+
         // Pink title bar: "NEW DEPOSIT" or "NEW PAYMENT"
         CafeTheme.printHeaderBar(isDeposit ? "NEW DEPOSIT" : "NEW PAYMENT");
 
@@ -55,7 +60,7 @@ public class HomeScreen {
         String vendor = askForText("Enter vendor: ");
         double amount = askForAmount();
 
-        // * Deposits are always positive, payments always negative, whatever the user types
+        // Deposits are always positive, payments always negative, whatever the user types.
         double finalAmount;
         if (isDeposit) {
             finalAmount = Math.abs(amount);
@@ -66,15 +71,15 @@ public class HomeScreen {
         }
         Transaction transaction = new Transaction(today, now, description, vendor, finalAmount);
 
-        // ? Why both? File = kept for next time, list = shows up in the ledger right now
+        // Save to both: the file keeps it for next time, the list shows it right now
         FileManager.saveTransaction(transaction);
         LedgerApp.transactions.add(transaction);
 
-        CafeTheme.printReceipt(transaction);   // pink receipt instead of a plain message
+        CafeTheme.printReceipt(transaction);
     }
 
-    // * Keeps asking until the user types something (blank isn't allowed)
-    // ! A | would break the CSV (it's our column separator), so swap it for a -
+    // Keeps asking until the user types something (blank isn't allowed)
+    // A | would break the CSV (it's our column separator), so swap it for a -
     public static String askForText(String question) {
         while (true) {
             System.out.print(question);
@@ -83,14 +88,13 @@ public class HomeScreen {
             if (text.isBlank()) {
                 System.out.println("This can't be empty. Try again.");
             } else {
-                return text;   // got something: hand it back
+                return text;
             }
         }
     }
 
-    // * Keeps asking until the user types a real number that isn't 0
-    // ? Why nextLine() + parseDouble instead of nextDouble()? "abc" would crash nextDouble(),
-    //   and nextLine() leaves no leftover Enter behind
+    // Keeps asking until the user types a real number that isn't 0
+    // nextLine() + parseDouble so "abc" shows a message instead of crashing
     public static double askForAmount() {
         while (true) {
             System.out.print("Enter amount: ");
@@ -102,11 +106,11 @@ public class HomeScreen {
                 if (amount == 0) {
                     System.out.println("Amount can't be 0. Try again.");
                 } else {
-                    return amount;   // a good number: leave the loop and hand it back
+                    return amount;
                 }
 
             } catch (NumberFormatException e) {
-                // runs when the text isn't a number, like "abc" or "$12"
+                // the text isn't a number, like "abc" or "$12"
                 System.out.println("Please enter a number, like 12.50");
             }
         }
