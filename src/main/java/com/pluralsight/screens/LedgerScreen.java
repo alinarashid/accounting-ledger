@@ -1,25 +1,25 @@
 package com.pluralsight.screens;
 
-// LedgerApp and Transaction live in com.pluralsight, a different package
+// My own classes from other packages
 import com.pluralsight.theme.CafeTheme;
 import com.pluralsight.LedgerApp;
 import com.pluralsight.Transaction;
 
 /**
  * LedgerScreen
- * Shows the transactions, newest first: all of them, only deposits,
- * or only payments. Also opens the reports screen.
+ * Shows transactions newest first: all, deposits only, or payments only.
+ * Also opens the reports screen.
  */
 public class LedgerScreen {
 
-    // * Menu loop: keeps showing until the user picks H
+    // Menu loop: keeps showing until the user picks H
     public static void show() {
         String choice;
         do {
             CafeTheme.printBoard("LEDGER",
                     new String[]{"A", "D", "P", "R", "H"},
                     new String[]{"All entries", "Deposits", "Payments", "Reports", "Home"},
-                    null);
+                    null); // null = no hints on this menu
             CafeTheme.printPrompt();
             choice = LedgerApp.scanner.nextLine().toUpperCase();
 
@@ -28,20 +28,19 @@ public class LedgerScreen {
                 case "D" -> showTransactions("DEPOSITS");
                 case "P" -> showTransactions("PAYMENTS");
                 case "R" -> ReportsScreen.show();
-                // ! Don't call HomeScreen.show() here: just let this loop end and we go back home
+                // No HomeScreen.show() here: ending this loop takes us back home
                 case "H" -> System.out.println("Going home..");
                 default -> System.out.println("Invalid choice.");
             }
         } while (!choice.equals("H"));
     }
 
-    // Shows "ALL", "DEPOSITS" (amount > 0) or "PAYMENTS" (amount < 0)
+    // One method for all 3: "ALL", "DEPOSITS" (amount > 0) or "PAYMENTS" (amount < 0)
     public static void showTransactions(String type) {
-        // * Newest first: start at the LAST index and walk backwards to 0
-
         CafeTheme.printHeaderBar("LEDGER  ·  " + type + "  ·  newest first");
         CafeTheme.printTableHeader();
 
+        // Newest first: start at the last index and walk back to 0
         for (int i = LedgerApp.transactions.size() - 1; i >= 0; i--) {
             Transaction transaction = LedgerApp.transactions.get(i);
 
@@ -57,7 +56,7 @@ public class LedgerScreen {
             }
 
             if (show) {
-                System.out.println(transaction);
+                System.out.println(transaction); // calls Transaction's toString()
             }
         }
     }
