@@ -154,6 +154,27 @@ public class ReportsScreen {
         System.out.print("Enter Amount: ");
         String amount = LedgerApp.scanner.nextLine();
 
+        // * Turn the typed text into dates and a number ONCE, before the loop
+        // ! If anything is typed wrong, show a message and go back to the menu instead of crashing
+        LocalDate from = null;
+        LocalDate to = null;
+        double amountParsed = 0;
+
+        try {
+            if (!startDate.isBlank()) {
+                from = LocalDate.parse(startDate.trim());
+            }
+            if (!endDate.isBlank()) {
+                to = LocalDate.parse(endDate.trim());
+            }
+            if (!amount.isBlank()) {
+                amountParsed = Double.parseDouble(amount.trim());
+            }
+        } catch (Exception e) {
+            System.out.println("Invalid input. Dates must look like 2026-11-04 and amounts like 12.50");
+            return;   // leave customSearch, back to the reports menu
+        }
+
         CafeTheme.printHeaderBar("CUSTOM SEARCH");
         CafeTheme.printTableHeader();
         boolean found = false;
@@ -165,14 +186,12 @@ public class ReportsScreen {
             boolean matches = true;
 
             if (!startDate.isBlank()) {
-                LocalDate from = LocalDate.parse(startDate);
                 if (transaction.getDate().isBefore(from)) {
                     matches = false;
                 }
             }
 
             if (!endDate.isBlank()) {
-                LocalDate to = LocalDate.parse(endDate);
                 if (transaction.getDate().isAfter(to)) {
                     matches = false;
                 }
@@ -195,7 +214,6 @@ public class ReportsScreen {
 
             // ! Exact match, so payments need the minus sign (-320 finds it, 320 doesn't)
             if (!amount.isBlank()) {
-                double amountParsed = Double.parseDouble(amount);
                 if (transaction.getAmount() != amountParsed) {
                     matches = false;
                 }
