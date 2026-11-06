@@ -1,6 +1,6 @@
 package com.pluralsight;
 
-// Screens and theme are different packages, so they need imports
+// Screens and theme are different packages, so they need imports.
 import com.pluralsight.theme.CafeSound;
 import com.pluralsight.theme.CafeTheme;
 import com.pluralsight.screens.HomeScreen;
@@ -26,14 +26,14 @@ public class LedgerApp {
 
     public static void main(String[] args) {
 
-        // Picture first, so the screen isn't blank during the sound
-        // Painted from cafe_storefront.txt
+        // Picture first, so the screen isn't blank during the sound.
+        // Painted from cafe_storefront.txt.
         CafeTheme.printStorefront();
 
-        // Dreamy intro sound
+        // Dreamy intro sound.
         CafeSound.playDreamyWelcome();
 
-        // App ends when the user exits the home screen
+        // App ends when the user exits the home screen.
         HomeScreen.show();
     }
 }
