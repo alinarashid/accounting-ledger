@@ -1,6 +1,6 @@
 package com.pluralsight;
-// Different package, so it needs an import
 
+// Screens and theme are different packages, so they need imports
 import com.pluralsight.theme.CafeSound;
 import com.pluralsight.theme.CafeTheme;
 import com.pluralsight.screens.HomeScreen;
@@ -11,23 +11,28 @@ import java.util.Scanner;
 
 /**
  * LedgerApp
- * The starting point of the app.
- * It holds the data every screen shares (the Scanner and the list of transactions),
- * then opens the home screen.
+ * Starting point of the app. Holds the data every screen shares,
+ * shows my cafe's storefront, then opens the home screen.
  */
+
 public class LedgerApp {
 
-    // * Shared by all screens (public: screens are in another package, static: one copy)
+    // One Scanner for the whole app, so screens never compete for keyboard input.
+    // public + static: one shared copy that classes in other packages can use.
     public static Scanner scanner = new Scanner(System.in);
 
-    // ! Loaded from the CSV as soon as the app starts, before main() runs
+    // Every transaction, loaded from transactions.csv as soon as the app starts.
     public static ArrayList<Transaction> transactions = FileManager.loadTransactions();
 
     public static void main(String[] args) {
-        // the pixel art cafe, painted from cafe_storefront.txt
+
+        // Picture first, so the screen isn't blank during the sound
+        // Painted from cafe_storefront.txt
         CafeTheme.printStorefront();
-        // dreamy intro sound
+
+        // Dreamy intro sound
         CafeSound.playDreamyWelcome();
+
         // App ends when the user exits the home screen
         HomeScreen.show();
     }
